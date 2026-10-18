@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark light">
+  <meta name="description" content="ダレデジ合宿の進行スライドです。">
+  <title>ダレデジ合宿｜進行スライド</title>
+  <link rel="stylesheet" href="viewer.css">
+  <script src="viewer.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#viewer-controls">スライド操作へ移動</a>
+  <div class="viewer-shell">
+    <main class="stage-area" id="stage-area" aria-label="スライド投影画面">
+      <div class="slide-viewport" id="slide-viewport" hidden>
+        <iframe id="slide-frame" class="slide-frame" title="スライド" tabindex="0"
+          allow="fullscreen" referrerpolicy="same-origin"></iframe>
+      </div>
+      <div class="stage-message" id="stage-message" role="status">
+        <p id="stage-message-text">スライドを読み込んでいます。</p>
+        <button id="retry-button" type="button" hidden>再読み込み</button>
+      </div>
+    </main>
+
+    <footer class="viewer-controls" id="viewer-controls" aria-label="スライド操作">
+      <div class="navigation-controls">
+        <button class="icon-button" id="previous-button" type="button" aria-label="前のスライド" title="前のスライド（←）" disabled>
+          <span aria-hidden="true">←</span>
+        </button>
+        <form id="page-form" class="page-form">
+          <label class="visually-hidden" for="page-number">スライド番号</label>
+          <input id="page-number" type="number" min="1" max="93" value="1" inputmode="numeric" autocomplete="off" aria-describedby="page-total" disabled>
+          <span id="page-total" class="page-total">/ 93</span>
+          <button class="visually-hidden" type="submit">指定したスライドへ移動</button>
+        </form>
+        <button class="icon-button" id="next-button" type="button" aria-label="次のスライド" title="次のスライド（→・Space）" disabled>
+          <span aria-hidden="true">→</span>
+        </button>
+      </div>
+
+      <p class="current-title" id="current-title">ダレデジ合宿</p>
+
+      <div class="utility-controls">
+        <button id="overview-button" type="button" aria-haspopup="dialog" disabled>一覧</button>
+        <button id="fullscreen-button" type="button" aria-pressed="false" title="全画面表示（F）">全画面</button>
+        <button id="print-button" type="button" title="全スライドを印刷" disabled>印刷</button>
+        <button class="help-button" id="help-button" type="button" aria-label="操作方法" aria-haspopup="dialog">?</button>
+      </div>
+    </footer>
+  </div>
+
+  <p class="visually-hidden" id="navigation-status" aria-live="polite" aria-atomic="true"></p>
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <dialog class="overview-dialog" id="overview-dialog" aria-labelledby="overview-heading">
+    <div class="dialog-header">
+      <h1 id="overview-heading">スライド一覧</h1>
+      <button class="dialog-close" type="button" data-close-dialog aria-label="一覧を閉じる">閉じる</button>
+    </div>
+    <div class="overview-search">
+      <label for="slide-search">タイトル・番号で絞り込む</label>
+      <input id="slide-search" type="search" autocomplete="off" placeholder="例：伴走、14">
+    </div>
+    <p class="search-result" id="search-result" aria-live="polite"></p>
+    <ol class="slide-list" id="slide-list"></ol>
+  </dialog>
+
+  <dialog class="help-dialog" id="help-dialog" aria-labelledby="help-heading">
+    <div class="dialog-header">
+      <h1 id="help-heading">操作方法</h1>
+      <button class="dialog-close" type="button" data-close-dialog aria-label="操作方法を閉じる">閉じる</button>
+    </div>
+    <dl class="shortcut-list">
+      <div><dt>次のスライド</dt><dd>→・Page Down・Space</dd></div>
+      <div><dt>前のスライド</dt><dd>←・Page Up・Shift + Space</dd></div>
+      <div><dt>最初・最後へ</dt><dd>Home・End</dd></div>
+      <div><dt>全画面の切り替え</dt><dd>F</dd></div>
+      <div><dt>全スライドを印刷</dt><dd>印刷ボタン・Ctrl / ⌘ + P</dd></div>
+      <div><dt>スマートフォン</dt><dd>左右にスワイプ</dd></div>
+    </dl>
+    <p>番号を入力してEnterを押すと移動します。表示中のURLから同じスライドを開けます。</p>
+    <p>印刷では、全スライドの読み込み後に印刷画面を開きます。</p>
+  </dialog>
+
+  <dialog class="print-dialog" id="print-dialog" aria-labelledby="print-heading" aria-describedby="print-progress">
+    <h1 id="print-heading">印刷を準備しています</h1>
+    <p id="print-progress" aria-live="polite">スライドを読み込んでいます。</p>
+    <progress id="print-meter" value="0" max="93" aria-label="印刷準備の進み具合"></progress>
+    <button id="cancel-print-button" type="button">キャンセル</button>
+  </dialog>
+
+  <div class="print-pages" id="print-pages" aria-hidden="true"></div>
+  <noscript><p class="noscript-message">スライドを表示するにはJavaScriptを有効にしてください。</p></noscript>
+</body>
+</html>
