@@ -59,10 +59,11 @@
     state.position = nextPosition;
     ui.viewport.setAttribute('aria-busy', 'true');
     ui.frame.title = `スライド${slide.index}：${slide.title}`;
-    // Keep navigation history in the viewer URL, without separate iframe entries.
+    // Start the first iframe document through src; replace subsequent documents
+    // so only the viewer URL contributes entries to browser navigation history.
     const targetURL = new URL(slideURL(slide), window.location.href).href;
-    if (ui.frame.contentWindow) ui.frame.contentWindow.location.replace(targetURL);
-    else ui.frame.src = targetURL;
+    if (!ui.frame.hasAttribute('src') || !ui.frame.contentWindow) ui.frame.src = targetURL;
+    else ui.frame.contentWindow.location.replace(targetURL);
     ui.title.textContent = slide.title;
     ui.title.title = slide.title;
     ui.previous.disabled = nextPosition === 0;
