@@ -13,9 +13,9 @@
     printMeter: $('print-meter'), cancelPrint: $('cancel-print-button'), printPages: $('print-pages'),
     help: $('help-button'), helpDialog: $('help-dialog'), status: $('navigation-status'), toast: $('toast')
   };
-  const state = { slides: [], position: -1, scale: 1, swipe: null, printController: null, printReady: false };
+  const state = { slides: [], assetVersion: '', position: -1, scale: 1, swipe: null, printController: null, printReady: false };
   let toastTimer;
-  const slideURL = (slide) => `assets/slides/${String(slide.index).padStart(2, '0')}.html`;
+  const slideURL = (slide) => `assets/slides/${String(slide.index).padStart(2, '0')}.html${state.assetVersion ? `?v=${encodeURIComponent(state.assetVersion)}` : ''}`;
   const isElement = (target) => target && target.nodeType === 1 && typeof target.closest === 'function';
   const anyDialogOpen = () => document.querySelector('dialog[open]') !== null;
 
@@ -271,6 +271,7 @@
       const response = await fetch('manifest.json', { cache: 'no-cache' });
       if (!response.ok) throw new Error('manifest');
       const payload = await response.json();
+      state.assetVersion = typeof payload.version === 'string' ? payload.version : '';
       const slides = Array.isArray(payload) ? payload : payload.slides;
       if (!Array.isArray(slides) || !slides.length) throw new Error('empty');
       const indexes = new Set();
